@@ -4,7 +4,7 @@
   "height": 600,
   "title": "COVID-19 Cases by State in Australia",
   "data": {
-    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case_count_by_state.csv"
+    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case%20by%20date%20and%20state.csv"
   },
   "params": [
     {
