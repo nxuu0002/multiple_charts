@@ -13,9 +13,9 @@
       "bind": {
         "input": "range",
         "min": 0,
-        "max": 10000000,
-        "step": 100000,
-        "name": "Minimum Population: "
+        "max": 5000000,
+        "step": 10000,
+        "name": "Population: "
       }
     },
     {
@@ -63,13 +63,13 @@
       "field": "Confirmed_Case",
       "type": "quantitative",
       "title": "Confirmed Cases",
-      "axis": {"tickCount": 7},
+      "axis": {"tickCount": 5},
       "scale": {"type": "log", "domain": [1, 2000000]}
     },
     "y": {
       "field": "Death",
       "type": "quantitative",
-      "axis": {"tickCount": 6},
+      "axis": {"tickCount": 5},
       "scale": {"type": "log", "domain": [1, 400000]}
     }
   },
@@ -89,7 +89,7 @@
           "type": "quantitative",
           "scale": {
             "type": "threshold",
-            "domain": [10000, 100000, 500000, 1000000, 10000000],
+            "domain": [10000, 100000, 500000, 1000000, 5000000, 10000000],
             "range": [10, 50, 150, 200, 300, 400]
           },
           "legend": {"format": ".1s"}
@@ -130,7 +130,7 @@
           {"field": "Confirmed_Case", "type": "quantitative", "format": ","},
           {"field": "Death", "type": "quantitative", "format": ","},
           {
-            "field": "Cases per 1,000 Population",
+            "field": "Cases per 1000 Population",
             "type": "quantitative",
             "format": ".2f"
           }
@@ -161,7 +161,7 @@
           {"field": "Confirmed_Case", "type": "quantitative", "format": ","},
           {"field": "Death", "type": "quantitative", "format": ","},
           {
-            "field": "Cases per 1,000 Population",
+            "field": "Cases per 1000 Population",
             "type": "quantitative",
             "format": ".2f"
           }
