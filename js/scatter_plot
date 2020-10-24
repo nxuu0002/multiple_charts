@@ -8,7 +8,7 @@
   },
   "params": [
     {
-      "name": "Population",
+      "name": "Population_above",
       "value": 0,
       "bind": {
         "input": "range",
@@ -51,7 +51,7 @@
   "transform": [
     {"filter": "datum.Confirmed_Case > 0"},
     {"filter": "datum.Death > 0"},
-    {"filter": "datum.Population > Population"},
+    {"filter": "datum.Population > Population_above"},
     {"filter": "State_selection == null || datum.State == State_selection"},
     {
       "calculate": "datum.Confirmed_Case/datum.Population * 1000",
@@ -76,7 +76,7 @@
   "layer": [
     {
       "selection": {
-        "State_highlight": {
+        "state_highlight": {
           "type": "multi",
           "fields": ["State"],
           "bind": "legend"
@@ -122,7 +122,7 @@
           }
         },
         "opacity": {
-          "condition": {"selection": "State_highlight", "value": 0.6},
+          "condition": {"selection": "state_highlight", "value": 0.6},
           "value": 0.2
         },
         "tooltip": [
