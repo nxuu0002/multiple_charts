@@ -2,83 +2,86 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "width": 800,
   "height": 600,
-  "title": "COVID-19 Cases by State in Australia",
+  "title": "COVID-19 Cases per Country (13 Oct 2020)",
   "data": {
-    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case%20by%20date%20and%20state.csv"
+    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case_count_by_state.csv"
   },
   "params": [
     {
-      "name": "Population_above",
+      "name": "Population_Above",
       "value": 0,
       "bind": {
         "input": "range",
         "min": 0,
-        "max": 5000000,
-        "step": 10000,
-        "name": "Population: "
+        "max": 100000000,
+        "step": 1000000,
+        "name": "Minimum Population: "
       }
     },
     {
-      "name": "State_selection",
+      "name": "Date_selection",
       "bind": {
         "input": "select",
         "options": [
           null,
-          "South Australia",
-          "Victoria",
-          "New South Wales",
-          "Queensland",
-          "Western Australia",
-          "Tasmania",
-          "Australian Capital Territory",
-          "Northern Territory"
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct"
         ],
         "labels":[
           "Show All",
-          "South Australia",
-          "Victoria",
-          "New South Wales",
-          "Queensland",
-          "Western Australia",
-          "Tasmania",
-          "Australian Capital Territory",
-          "Northern Territory"
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October"
         ],
-        "name": "State Selection: "
+        "name": "Date Selection: "
       }
     }
   ],
   "transform": [
-    {"filter": "datum.Confirmed_Case > 0"},
-    {"filter": "datum.Death > 0"},
-    {"filter": "datum.Population > Population_above"},
-    {"filter": "State_selection == null || datum.State == State_selection"},
+    {"filter": "datum.Case > 0"},
+    {"filter": "datum.Population > Population_Above"},
+    {"filter": "Date_selection == null || datum.Date == Date_selection"},
     {
-      "calculate": "datum.Confirmed_Case/datum.Population * 1000",
+      "calculate": "datum.Case/datum.Population * 1000",
       "as": "Cases per 1000 Population"
     }
   ],
   "encoding": {
     "x": {
-      "field": "Confirmed_Case",
+      "field": "Case",
       "type": "quantitative",
-      "title": "Confirmed Cases",
-      "axis": {"tickCount": 5},
-      "scale": {"type": "log", "domain": [1, 2000000]}
+      "title": "Cases",
+      "axis": {"tickCount": 7},
+      "scale": {"type": "log", "domain": [1, 1000000]}
     },
     "y": {
-      "field": "Death",
+      "field": "Case",
       "type": "quantitative",
-      "axis": {"tickCount": 5},
-      "scale": {"type": "log", "domain": [1, 400000]}
+      "axis": {"tickCount": 6},
+      "scale": {"type": "log", "domain": [1, 1000000]}
     }
   },
   "layer": [
     {
       "selection": {
-        "state_highlight": {
+        "date_highlight": {
           "type": "multi",
-          "fields": ["State"],
+          "fields": ["Date"],
           "bind": "legend"
         }
       },
@@ -89,46 +92,24 @@
           "type": "quantitative",
           "scale": {
             "type": "threshold",
-            "domain": [10000, 100000, 500000, 1000000, 5000000, 10000000],
+            "domain": [100000, 1000000, 5000000, 10000000, 50000000],
             "range": [10, 50, 150, 200, 300, 400]
           },
           "legend": {"format": ".1s"}
         },
         "color": {
-          "field": "State",
-          "type": "nominal",
-          "scale": {
-            "domain": [
-              "South Australia",
-              "Victoria",
-              "New South Wales",
-              "Queensland",
-              "Western Australia",
-              "Tasmania",
-              "Australian Capital Territory",
-              "Northern Territory"
-            ],
-            "range": [
-              "#e41a1c",
-              "#984ea3",
-              "#ff7f00",
-              "#a6cee3",
-              "#377eb8",
-              "#a65628",
-              "#ea98d2",
-              "#659cca"
-              
-            ]
+          "field": "Date",
+          "type": "nominal"
           }
         },
         "opacity": {
-          "condition": {"selection": "state_highlight", "value": 0.6},
+          "condition": {"selection": "date_highlight", "value": 0.6},
           "value": 0.2
         },
         "tooltip": [
           {"field": "State", "type": "nominal"},
-          {"field": "Confirmed_Case", "type": "quantitative", "format": ","},
-          {"field": "Death", "type": "quantitative", "format": ","},
+          {"field": "Case", "type": "quantitative", "format": ","},
+          {"field": "Date", "type": "nominal", "format": ","},
           {
             "field": "Cases per 1000 Population",
             "type": "quantitative",
@@ -151,15 +132,15 @@
         "color": {"value": "black"},
         "opacity": {
           "condition": {
-            "test": "datum['State'] == 'South Australia' || datum['State'] == 'Victoria' || datum['State'] == 'New South Wales' || datum['State'] == 'Queensland' || datum['State'] == 'Western Australia' || datum['State'] == 'Tasmania' ||  datum['State'] == 'Australian Capital Territory' ||  datum['State'] == 'Northern Territory'",
+            "test": "datum['State'] == 'Victoria' || datum['State'] == 'New South Wales'",
             "value": 1
           },
           "value": 0
         },
         "tooltip": [
           {"field": "State", "type": "nominal"},
-          {"field": "Confirmed_Case", "type": "quantitative", "format": ","},
-          {"field": "Death", "type": "quantitative", "format": ","},
+          {"field": "Case", "type": "quantitative", "format": ","},
+          {"field": "Date", "type": "nominal", "format": ","},
           {
             "field": "Cases per 1000 Population",
             "type": "quantitative",
@@ -167,83 +148,6 @@
           }
         ]
       }
-    }
-  ]
-}
-
-
-{
-  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "width": 800,
-  "height": 600,
-  "title": "COVID-19 Cases by State in Australia",
-  "data": {
-    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case_count_by_state.csv"
-  },
-  "layer": [
-    {
-      "encoding": {
-        "x": {"field": "date", "type": "temporal"},
-        "y": {"field": "price", "type": "quantitative"},
-        "color": {"field": "symbol", "type": "nominal"}
-      },
-      "layer": [
-        {"mark": "line"},
-        {
-          "selection": {
-            "label": {
-              "type": "single",
-              "nearest": true,
-              "on": "mouseover",
-              "encodings": ["x"],
-              "empty": "none"
-            }
-          },
-          "mark": "point",
-          "encoding": {
-            "opacity": {
-              "condition": {"selection": "label", "value": 1},
-              "value": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "transform": [{"filter": {"selection": "label"}}],
-      "layer": [
-        {
-          "mark": {"type": "rule", "color": "gray"},
-          "encoding": {
-            "x": {"type": "temporal", "field": "date", "aggregate": "min"}
-          }
-        },
-        {
-          "encoding": {
-            "text": {"type": "quantitative", "field": "price"},
-            "x": {"type": "temporal", "field": "date"},
-            "y": {"type": "quantitative", "field": "price"}
-          },
-          "layer": [
-            {
-              "mark": {
-                "type": "text",
-                "stroke": "white",
-                "strokeWidth": 2,
-                "align": "left",
-                "dx": 5,
-                "dy": -5
-              }
-            },
-            {
-              "mark": {"type": "text", "align": "left", "dx": 5, "dy": -5},
-              "encoding": {
-                "color": {"type": "nominal", "field": "symbol"}
-              }
-            }
-          ]
-        }
-      ]
     }
   ]
 }
