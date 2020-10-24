@@ -4,20 +4,39 @@
   "height": 600,
   "title": "COVID-19 Cases per Country (13 Oct 2020)",
   "data": {
-    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case_count_by_state.csv"
+    "url": "https://raw.githubusercontent.com/nxuu0002/multiple_charts/main/data/case%20by%20date%20and%20state.csv"
   },
   "params": [
-    {
-      "name": "Population_Above",
-      "value": 0,
+        {
+      "name": "State_selection",
       "bind": {
-        "input": "range",
-        "min": 0,
-        "max": 100000000,
-        "step": 1000000,
-        "name": "Minimum Population: "
+        "input": "select",
+        "options": [
+          null,
+          "Australian Capital Territory",
+          "New South Wales",
+          "Queensland",
+          "South Australia",
+          "Tasmania",
+          "Victoria",
+          "Western Australia",
+          "Northern Territory"
+        ],
+        "labels":[
+          "Show All",
+          "Australian Capital Territory",
+          "New South Wales",
+          "Queensland",
+          "South Australia",
+          "Tasmania",
+          "Victoria",
+          "Western Australia",
+          "Northern Territory"
+        ],
+        "name": "State Selection: "
       }
-    },
+    }
+    ,
     {
       "name": "Date_selection",
       "bind": {
@@ -48,17 +67,18 @@
           "September",
           "October"
         ],
-        "name": "Date Selection: "
+        "name": "Month Selection: "
       }
     }
   ],
   "transform": [
     {"filter": "datum.Case > 0"},
-    {"filter": "datum.Population > Population_Above"},
+    {"filter": "datum.Population > 0"},
     {"filter": "Date_selection == null || datum.Date == Date_selection"},
+    {"filter": "State_selection == null || datum.State == State_selection"},
     {
-      "calculate": "datum.Case/datum.Population * 1000",
-      "as": "Cases per 1000 Population"
+      "calculate": "datum.Case/datum.Population * 10000",
+      "as": "Cases per 10000 Population"
     }
   ],
   "encoding": {
@@ -66,14 +86,14 @@
       "field": "Case",
       "type": "quantitative",
       "title": "Cases",
-      "axis": {"tickCount": 7},
+      "axis": {"tickCount": 6},
       "scale": {"type": "log", "domain": [1, 1000000]}
     },
     "y": {
-      "field": "Case",
-      "type": "quantitative",
+      "field": "Date",
+      "type": "nominal",
       "axis": {"tickCount": 6},
-      "scale": {"type": "log", "domain": [1, 1000000]}
+      "scale":{"domain":["Oct","Sep","Aug","Jul","Jun","May","Apr","Mar","Feb","Jan"]}
     }
   },
   "layer": [
@@ -88,36 +108,36 @@
       "mark": "circle",
       "encoding": {
         "size": {
-          "field": "Population",
+          "field": "Case",
           "type": "quantitative",
           "scale": {
             "type": "threshold",
-            "domain": [100000, 1000000, 5000000, 10000000, 50000000],
-            "range": [10, 50, 150, 200, 300, 400]
+            "domain": [50, 500, 5000, 50000, 100000],
+            "range": [30, 90, 190, 400, 700, 1200]
           },
           "legend": {"format": ".1s"}
         },
         "color": {
-          "field": "Date",
+          "field": "State",
           "type": "nominal"
-          }
-        },
+          },
+        
         "opacity": {
-          "condition": {"selection": "date_highlight", "value": 0.6},
+          "condition": {"selection": "date_highlight", "value": 0.7},
           "value": 0.2
         },
         "tooltip": [
           {"field": "State", "type": "nominal"},
           {"field": "Case", "type": "quantitative", "format": ","},
-          {"field": "Date", "type": "nominal", "format": ","},
           {
-            "field": "Cases per 1000 Population",
+            "field": "Cases per 10000 Population",
             "type": "quantitative",
             "format": ".2f"
           }
         ]
       }
     },
+  
     {
       "mark": {
         "type": "text",
@@ -132,17 +152,15 @@
         "color": {"value": "black"},
         "opacity": {
           "condition": {
-            "test": "datum['State'] == 'Victoria' || datum['State'] == 'New South Wales'",
-            "value": 1
+            "test": "datum['State'] == 'Tasmania' || datum['State'] == 'New South Wales'"         
           },
           "value": 0
         },
         "tooltip": [
           {"field": "State", "type": "nominal"},
           {"field": "Case", "type": "quantitative", "format": ","},
-          {"field": "Date", "type": "nominal", "format": ","},
           {
-            "field": "Cases per 1000 Population",
+            "field": "Cases per 10000 Population",
             "type": "quantitative",
             "format": ".2f"
           }
@@ -151,3 +169,5 @@
     }
   ]
 }
+
+
